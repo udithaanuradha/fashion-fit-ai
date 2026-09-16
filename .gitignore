@@ -6,6 +6,10 @@ backend/.mvn/wrapper/maven-wrapper.jar
 !.mvn/wrapper/maven-wrapper.properties
 HELP.md
 
+# Local-only Spring profile — holds real DB credentials (e.g. Supabase password).
+# Never commit this; application.yml falls back to local Postgres without it.
+backend/src/main/resources/application-local.yml
+
 # --- Frontend (Node / Vite) ---
 frontend/node_modules/
 frontend/dist/

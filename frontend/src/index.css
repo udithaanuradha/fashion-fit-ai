@@ -1,21 +1,24 @@
 :root {
   /* Theme tokens — light (default). Overridden under [data-theme="dark"]. */
-  --bg: #F8F8F9;
-  --card-bg: #FFFFFF;
+  --bg: #FAF7F2;
+  --card-bg: #FFFFFC;
   --card-border: transparent;
   --text: #1A1A1A;
-  --text-muted: #6B6B6B;
-  --border: #E0E0E0;
-  --placeholder: #B0B0B0;
+  --text-muted: #7A7268;
+  --border: #E9E2D3;
+  --placeholder: #B8AF9E;
   --accent: #0F39D6;
   --accent-text: #FFFFFF;
 
   /* Derived tokens (kept in sync with --accent above; components never branch on theme). */
   --accent-bg: rgba(15, 57, 214, 0.1);
   --accent-border: rgba(15, 57, 214, 0.5);
+  --accent-gradient: linear-gradient(135deg, #2F58EA 0%, #0F39D6 55%, #0A2799 100%);
+  --shadow-card: 0 1px 2px rgba(30, 22, 10, 0.04), 0 16px 40px rgba(30, 22, 10, 0.08);
+  --shadow-button: 0 10px 22px rgba(15, 57, 214, 0.28);
   --auth-heading-color: var(--text);
   --auth-banner-gradient: linear-gradient(160deg, #3355e6 0%, #0f39d6 45%, #081b6b 100%);
-  --auth-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --auth-card-shadow: var(--shadow-card);
   --overlay-text: #FFFFFF;
   --overlay-text-muted: rgba(255, 255, 255, 0.82);
 
@@ -47,21 +50,24 @@
 }
 
 [data-theme='dark'] {
-  --bg: #101010;
-  --card-bg: #141414;
+  --bg: #14110D;
+  --card-bg: #1B1712;
   --card-border: #F5C400;
   --text: #F5F0E6;
-  --text-muted: #9A9A9A;
-  --border: #2A2A2A;
-  --placeholder: #6E6E6E;
+  --text-muted: #A69C89;
+  --border: #332B1D;
+  --placeholder: #7A6F5C;
   --accent: #F5C400;
   --accent-text: #141414;
 
   --accent-bg: rgba(245, 196, 0, 0.15);
   --accent-border: rgba(245, 196, 0, 0.5);
+  --accent-gradient: linear-gradient(135deg, #FFE374 0%, #F5C400 55%, #C79A00 100%);
+  --shadow-card: 0 1px 0 rgba(245, 196, 0, 0.05), 0 20px 45px rgba(0, 0, 0, 0.55);
+  --shadow-button: 0 10px 24px rgba(245, 196, 0, 0.25);
   --auth-heading-color: var(--accent);
   --auth-banner-gradient: linear-gradient(160deg, #4a3d00 0%, #221b00 55%, #0a0800 100%);
-  --auth-card-shadow: none;
+  --auth-card-shadow: var(--shadow-card);
 
   --text-h: #f3f4f6;
   --code-bg: #1f2028;
@@ -82,15 +88,17 @@ body {
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  width: 100%;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  /* Same soft accent-tinted ambient glow used on the auth/wizard viewports,
+     so nav-bar pages (Color Match, Fitting Room) match. */
+  background:
+    radial-gradient(1200px 600px at 15% -10%, color-mix(in srgb, var(--accent) 8%, transparent) 0%, transparent 60%),
+    radial-gradient(1000px 500px at 100% 100%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 55%),
+    var(--bg);
 }
 
 h1,

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 // Step 3 doesn't exist yet — this is a placeholder destination until that
 // screen is built. It intentionally isn't registered in App.jsx, so it
@@ -99,6 +100,7 @@ export default function DefineSilhouette() {
 
   return (
     <div className="wizard-viewport">
+      <ThemeToggle />
       <div className="wizard-topbar">
         <div className="wizard-topbar-row">
           <button type="button" className="wizard-back-btn" onClick={() => navigate(-1)} aria-label="Go back">

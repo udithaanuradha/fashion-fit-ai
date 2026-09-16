@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import { isAuthenticated, clearToken } from "./api/client";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Auth from "./pages/Auth";
 import ColorMatch from "./pages/ColorMatch";
 import FittingRoom from "./pages/FittingRoom";
 import DefineSilhouette from "./pages/DefineSilhouette";
@@ -27,6 +26,16 @@ function RootRedirect() {
   return <Navigate to={isAuthenticated() ? "/colormatch" : "/login"} replace />;
 }
 
+function NavLink({ to, children }) {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+  return (
+    <Link to={to} className={`nav-link${isActive ? " nav-link--active" : ""}`}>
+      {children}
+    </Link>
+  );
+}
+
 function NavBar() {
   const authed = isAuthenticated();
 
@@ -38,17 +47,18 @@ function NavBar() {
   return (
     <nav className="navbar">
       <Link to="/" className="brand">
+        <span className="brand-mark" aria-hidden="true" />
         Fashion Fit AI
       </Link>
       <div className="nav-links">
-        <Link to="/colormatch">Color Match</Link>
-        <Link to="/fittingroom">Fitting Room</Link>
+        <NavLink to="/colormatch">Color Match</NavLink>
+        <NavLink to="/fittingroom">Fitting Room</NavLink>
         {authed ? (
-          <button onClick={handleLogout}>Log out</button>
+          <button className="nav-logout-btn" onClick={handleLogout}>Log out</button>
         ) : (
           <>
-            <Link to="/login">Log in</Link>
-            <Link to="/register">Sign up</Link>
+            <NavLink to="/login">Log in</NavLink>
+            <NavLink to="/register">Sign up</NavLink>
           </>
         )}
       </div>
@@ -71,8 +81,8 @@ function Shell() {
       <main className={showNavBar ? "app-content" : undefined}>
         <Routes>
           <Route path="/" element={<RootRedirect />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Auth />} />
           <Route
             path="/colormatch"
             element={
