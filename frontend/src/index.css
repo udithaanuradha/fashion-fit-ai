@@ -1,53 +1,158 @@
 :root {
-  --sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font: 16px/1.6 var(--sans);
-  letter-spacing: 0.02em;
-  color: #e5e7eb;
-  background: #020617;
+  /* Theme tokens — light (default). Overridden under [data-theme="dark"]. */
+  --bg: #FAF7F2;
+  --card-bg: #FFFFFC;
+  --card-border: transparent;
+  --text: #1A1A1A;
+  --text-muted: #7A7268;
+  --border: #E9E2D3;
+  --placeholder: #B8AF9E;
+  --accent: #0F39D6;
+  --accent-text: #FFFFFF;
+
+  /* Derived tokens (kept in sync with --accent above; components never branch on theme). */
+  --accent-bg: rgba(15, 57, 214, 0.1);
+  --accent-border: rgba(15, 57, 214, 0.5);
+  --accent-gradient: linear-gradient(135deg, #2F58EA 0%, #0F39D6 55%, #0A2799 100%);
+  --shadow-card: 0 1px 2px rgba(30, 22, 10, 0.04), 0 16px 40px rgba(30, 22, 10, 0.08);
+  --shadow-button: 0 10px 22px rgba(15, 57, 214, 0.28);
+  --auth-heading-color: var(--text);
+  --auth-banner-gradient: linear-gradient(160deg, #3355e6 0%, #0f39d6 45%, #081b6b 100%);
+  --auth-card-shadow: var(--shadow-card);
+  --overlay-text: #FFFFFF;
+  --overlay-text-muted: rgba(255, 255, 255, 0.82);
+
+  /* Unrelated to the auth pages; kept from the original scaffold styling. */
+  --text-h: #08060d;
+  --code-bg: #f4f3ec;
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  color-scheme: light;
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color: var(--text);
+  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
 }
 
-* {
-  box-sizing: border-box;
+[data-theme='dark'] {
+  --bg: #14110D;
+  --card-bg: #1B1712;
+  --card-border: #F5C400;
+  --text: #F5F0E6;
+  --text-muted: #A69C89;
+  --border: #332B1D;
+  --placeholder: #7A6F5C;
+  --accent: #F5C400;
+  --accent-text: #141414;
+
+  --accent-bg: rgba(245, 196, 0, 0.15);
+  --accent-border: rgba(245, 196, 0, 0.5);
+  --accent-gradient: linear-gradient(135deg, #FFE374 0%, #F5C400 55%, #C79A00 100%);
+  --shadow-card: 0 1px 0 rgba(245, 196, 0, 0.05), 0 20px 45px rgba(0, 0, 0, 0.55);
+  --shadow-button: 0 10px 24px rgba(245, 196, 0, 0.25);
+  --auth-heading-color: var(--accent);
+  --auth-banner-gradient: linear-gradient(160deg, #4a3d00 0%, #221b00 55%, #0a0800 100%);
+  --auth-card-shadow: var(--shadow-card);
+
+  --text-h: #f3f4f6;
+  --code-bg: #1f2028;
+  --social-bg: rgba(47, 48, 58, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+  color-scheme: dark;
 }
 
-html,
+[data-theme='dark'] #social .button-icon {
+  filter: invert(1) brightness(2);
+}
+
 body {
   margin: 0;
-  min-height: 100%;
-}
-
-body {
-  background: radial-gradient(circle at top, rgba(99, 102, 241, 0.18), transparent 28%), linear-gradient(180deg, #020617 0%, #09090b 100%);
-  color: #e5e7eb;
+  overflow-x: hidden;
 }
 
 #root {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* Same soft accent-tinted ambient glow used on the auth/wizard viewports,
+     so nav-bar pages (Color Match, Fitting Room) match. */
+  background:
+    radial-gradient(1200px 600px at 15% -10%, color-mix(in srgb, var(--accent) 8%, transparent) 0%, transparent 60%),
+    radial-gradient(1000px 500px at 100% 100%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 55%),
+    var(--bg);
 }
 
 h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  font-family: var(--sans);
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
 }
 
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
 p {
   margin: 0;
 }
 
-button,
-input {
-  font: inherit;
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
