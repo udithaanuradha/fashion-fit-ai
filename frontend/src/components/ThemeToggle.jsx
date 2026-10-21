@@ -31,11 +31,17 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch {
-      // localStorage may be unavailable (private browsing, disabled storage) — theme still applies this session.
+      // localStorage may be unavailable
     }
+    window.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
   }, [theme]);
 
   function toggleTheme() {

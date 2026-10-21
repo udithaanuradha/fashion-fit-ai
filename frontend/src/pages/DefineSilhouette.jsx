@@ -2,10 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 
-// Step 3 doesn't exist yet — this is a placeholder destination until that
-// screen is built. It intentionally isn't registered in App.jsx, so it
-// currently falls through to the catch-all NotFound route.
-const NEXT_STEP_PATH = "/onboarding/style-preferences";
+import { apiClient } from "../api/client";
+
+const NEXT_STEP_PATH = "/fittingroom";
 
 const GENDERS = [
   { value: "women", label: "Women" },
@@ -77,6 +76,8 @@ export default function DefineSilhouette() {
   const [modifiers, setModifiers] = useState([]);
   const [skinTone, setSkinTone] = useState(null);
 
+  const [saving, setSaving] = useState(false);
+
   const canContinue = Boolean(gender && primaryShape);
 
   function toggleModifier(name) {
@@ -85,17 +86,69 @@ export default function DefineSilhouette() {
     );
   }
 
-  function handleContinue() {
-    if (!canContinue) return;
-    console.log("Define Your Silhouette — collected state:", {
-      gender,
-      heightFtIn,
-      weightLbs,
-      primaryShape,
-      modifiers,
-      skinTone,
-    });
-    navigate(NEXT_STEP_PATH);
+  function parseHeightCm(str) {
+    if (!str) return 170.0;
+    const match = str.match(/(\d+)['\sft]+(\d+)?/);
+    if (match) {
+      const ft = parseInt(match[1], 10) || 5;
+      const inches = parseInt(match[2] || "0", 10);
+      return Math.round((ft * 12 + inches) * 2.54);
+    }
+    const val = parseFloat(str);
+    if (isNaN(val)) return 170.0;
+    return val > 100 ? val : Math.round(val * 2.54);
+  }
+
+  function parseWeightKg(str) {
+    const val = parseFloat(str);
+    if (isNaN(val) || val <= 0) return 65.0;
+    return val > 90 ? Math.round(val * 0.453592) : val;
+  }
+
+  async function handleContinue() {
+    if (!canContinue || saving) return;
+    setSaving(true);
+
+    const heightCm = parseHeightCm(heightFtIn);
+    const weightKg = parseWeightKg(weightLbs);
+
+    // Baseline proportional metric estimates derived from shape and gender
+    let chestCm = 92.0;
+    let waistCm = 74.0;
+    let hipsCm = 98.0;
+
+    if (primaryShape === "hourglass") {
+      chestCm = 94.0;
+      waistCm = 68.0;
+      hipsCm = 98.0;
+    } else if (primaryShape === "pear") {
+      chestCm = 88.0;
+      waistCm = 72.0;
+      hipsCm = 104.0;
+    } else if (primaryShape === "athletic") {
+      chestCm = 96.0;
+      waistCm = 76.0;
+      hipsCm = 92.0;
+    } else if (primaryShape === "apple") {
+      chestCm = 96.0;
+      waistCm = 86.0;
+      hipsCm = 94.0;
+    }
+
+    try {
+      await apiClient.post("/fittingroom/measurements", {
+        heightCm,
+        weightKg,
+        chestCm,
+        waistCm,
+        hipsCm,
+      });
+    } catch {
+      // Proceed even if network/offline
+    } finally {
+      setSaving(false);
+      navigate(NEXT_STEP_PATH);
+    }
   }
 
   return (
@@ -261,10 +314,10 @@ export default function DefineSilhouette() {
           <button
             type="button"
             className="wizard-continue-btn"
-            disabled={!canContinue}
+            disabled={!canContinue || saving}
             onClick={handleContinue}
           >
-            Continue →
+            {saving ? "Calibrating Atelier…" : "Continue →"}
           </button>
         </div>
       </div>
