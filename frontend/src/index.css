@@ -1,3 +1,7 @@
+@import 'tailwindcss';
+
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Theme tokens — light (default). Overridden under [data-theme="dark"]. */
   --bg: #FAF7F2;

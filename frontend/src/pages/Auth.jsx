@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { apiClient, setToken } from "../api/client";
 import ThemeToggle from "../components/ThemeToggle";
 

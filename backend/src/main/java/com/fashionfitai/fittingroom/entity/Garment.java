@@ -63,6 +63,10 @@ public class Garment {
         return category;
     }
 
+    public void addSize(GarmentSize size) {
+        this.sizes.add(size);
+    }
+
     public List<GarmentSize> getSizes() {
         return sizes;
     }
