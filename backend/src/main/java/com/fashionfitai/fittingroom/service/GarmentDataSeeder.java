@@ -23,6 +23,7 @@ public class GarmentDataSeeder implements CommandLineRunner {
     }
 
     @Override
+    @SuppressWarnings("null")
     public void run(String... args) {
         if (garmentRepository.count() > 0) {
             return;

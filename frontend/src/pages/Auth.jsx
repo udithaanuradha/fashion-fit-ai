@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { apiClient, setToken } from "../api/client";
 import ThemeToggle from "../components/ThemeToggle";
+import RunwayBanner from "../components/RunwayBanner";
 
 const APP_NAME = "Fit Muse";
 
@@ -120,14 +121,7 @@ export default function Auth() {
     <div className="auth-viewport auth-viewport--split">
       <ThemeToggle />
 
-      <div className="auth-banner">
-        <div className="auth-banner-overlay">
-          <h1 className="auth-banner-headline">Made to Fit.</h1>
-          <p className="auth-banner-subhead">
-            Join {APP_NAME} and get outfit and color guidance built around you.
-          </p>
-        </div>
-      </div>
+      <RunwayBanner appName={APP_NAME} />
 
       <div className="auth-panel">
         <div className={`auth-card auth-transition-container ${animating ? "auth-fade-out" : "auth-fade-in"}`}>
